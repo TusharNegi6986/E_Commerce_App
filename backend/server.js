@@ -22,7 +22,6 @@ app.use(express.json());
  */
 const allowedOrigins = [
   "https://e-commerce-app-frontend-red.vercel.app",
-  "https://e-commerce-app-frontend-o7k7wex87-tusharnegi6986s-projects.vercel.app"
 ];
 
 app.use(cors({
