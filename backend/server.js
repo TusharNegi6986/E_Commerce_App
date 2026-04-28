@@ -10,32 +10,35 @@ import orderRouter from "./routes/orderRoute.js";
 
 const app = express();
 
-// Connect DB + Cloudinary
+// DB + Cloudinary
 connectDB();
 connectCloudinary();
 
 app.use(express.json());
 
 /**
- * ✅ BEST PRACTICE:
- * Keep only active frontend URLs
- * (add admin later if needed)
+ * ✅ FIXED CORS (PRODUCTION READY)
+ * Works with Vercel preview + main domains
  */
 const allowedOrigins = [
-  "https://e-commerce-app-frontend-o7k7wex87-tusharnegi6986s-projects.vercel.app"
+  "https://e-commerce-app-frontend-pwuzna5l0-tusharnegi6986s-projects.vercel.app"
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like Postman or server-to-server)
+    // allow Postman / server requests
     if (!origin) return callback(null, true);
 
-    if (allowedOrigins.includes(origin)) {
+    // allow exact matches OR any Vercel frontend
+    if (
+      allowedOrigins.includes(origin) ||
+      origin.includes("vercel.app")
+    ) {
       return callback(null, true);
-    } else {
-      console.log("Blocked by CORS:", origin);
-      return callback(new Error("CORS not allowed"));
     }
+
+    console.log("❌ Blocked by CORS:", origin);
+    return callback(null, false);
   },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "token"],
@@ -52,5 +55,5 @@ app.get("/", (req, res) => {
   res.send("API Working");
 });
 
-// ❌ IMPORTANT: NO app.listen() in Vercel
+// ❌ REQUIRED for Vercel
 export default app;
