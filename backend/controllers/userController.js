@@ -85,6 +85,10 @@ const registerUser = async (req, res) => {
 
 // Route for admin login
 const adminLogin = async (req, res) => {
+  console.log("Entered Email:", email);
+console.log("Entered Password:", password);
+console.log("ENV Email:", process.env.ADMIN_EMAIL);
+console.log("ENV Password:", process.env.ADMIN_PASSWORD);
   try {
     const {email,password} = req.body
     if (email === process.env.ADMIN_Email && password === process.env.ADMIN_PASSWORD) {
