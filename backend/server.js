@@ -21,27 +21,21 @@ app.use(express.json());
  * Works with Vercel preview + main domains
  */
 const allowedOrigins = [
-  "https://e-commerce-app-frontend-pwuzna5l0-tusharnegi6986s-projects.vercel.app"
+  "https://e-commerce-app-frontend-red.vercel.app",
+  "https://e-commerce-app-frontend-o7k7wex87-tusharnegi6986s-projects.vercel.app"
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
-    // allow Postman / server requests
     if (!origin) return callback(null, true);
 
-    // allow exact matches OR any Vercel frontend
-    if (
-      allowedOrigins.includes(origin) ||
-      origin.includes("vercel.app")
-    ) {
-      return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log("Blocked by CORS:", origin);
+      callback(null, true); // ⚠️ temporarily allow all (for debugging)
     }
-
-    console.log("❌ Blocked by CORS:", origin);
-    return callback(null, false);
   },
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "token"],
   credentials: true
 }));
 

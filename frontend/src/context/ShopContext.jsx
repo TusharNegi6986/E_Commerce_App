@@ -7,7 +7,7 @@ import axios from "axios";
 const ShopContextProvider = (props) => {
   const currency = "₹";
   const delivery_fee = 10;
-const backendUrl = "https://e-commerce-app-backend-topaz.vercel.app";
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const [cartItems, setCartItems] = useState({});
@@ -121,17 +121,21 @@ const backendUrl = "https://e-commerce-app-backend-topaz.vercel.app";
     }
   };
 
-  const getUserCart = async(token)=>{
-    try{
-      const response = await axios.post(backendUrl +'/api/cart/get',{},{headers:{token}})
+  const getUserCart = async (token) => {
+    try {
+      const response = await axios.post(
+        backendUrl + "/api/cart/get",
+        {},
+        { headers: { token } },
+      );
       if (response.data.success) {
-        setCartItems(response.data.cartData)                                                                                                                                                                            
+        setCartItems(response.data.cartData);
       }
-    } catch(error){
+    } catch (error) {
       console.log(error);
       toast.error(error.message);
     }
-  }
+  };
 
   useEffect(() => {
     getProductsData();
@@ -140,7 +144,7 @@ const backendUrl = "https://e-commerce-app-backend-topaz.vercel.app";
   useEffect(() => {
     if (!token && localStorage.getItem("token")) {
       setToken(localStorage.getItem("token"));
-      getUserCart(localStorage.getItem("token"))
+      getUserCart(localStorage.getItem("token"));
     }
   }, []);
 
