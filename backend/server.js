@@ -10,15 +10,35 @@ import orderRouter from "./routes/orderRoute.js";
 
 const app = express();
 
-// Connect DB ONLY ONCE (important for serverless)
+// Connect DB + Cloudinary
 connectDB();
 connectCloudinary();
 
 app.use(express.json());
 
+/**
+ * ✅ BEST PRACTICE:
+ * Keep only active frontend URLs
+ * (add admin later if needed)
+ */
+const allowedOrigins = [
+  "https://e-commerce-app-frontend-o7k7wex87-tusharnegi6986s-projects.vercel.app"
+];
+
 app.use(cors({
-  origin: "https://e-commerce-app-frontend-red.vercel.app",
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like Postman or server-to-server)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      console.log("Blocked by CORS:", origin);
+      return callback(new Error("CORS not allowed"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "token"],
   credentials: true
 }));
 
@@ -32,6 +52,5 @@ app.get("/", (req, res) => {
   res.send("API Working");
 });
 
-// ❌ REMOVE app.listen()
-
+// ❌ IMPORTANT: NO app.listen() in Vercel
 export default app;
