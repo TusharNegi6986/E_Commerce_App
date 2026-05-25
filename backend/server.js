@@ -14,16 +14,13 @@ const app = express();
 connectDB();
 connectCloudinary();
 
-app.use(express.json());
-
-/**
- * ✅ FIXED CORS (PRODUCTION READY)
- * Works with Vercel preview + main domains
- */
 const allowedOrigins = [
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
   "https://e-commerce-app-frontend-red.vercel.app"
 ];
 
+// CORS
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin) return callback(null, true);
@@ -32,12 +29,14 @@ app.use(cors({
       return callback(null, true);
     }
 
-    console.log("❌ Blocked origin:", origin);
-    return callback(new Error("CORS not allowed"));
+    return callback(null, false);
   },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  credentials: true
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization", "token"]
 }));
+
+app.use(express.json());
 
 // routes
 app.use("/api/user", userRouter);
@@ -49,5 +48,4 @@ app.get("/", (req, res) => {
   res.send("API Working");
 });
 
-// ❌ REQUIRED for Vercel
 export default app;
