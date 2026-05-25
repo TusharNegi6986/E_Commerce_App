@@ -12,12 +12,7 @@ const connectDB = async () => {
       serverSelectionTimeoutMS: 5000,
     });
 
-    console.log("✅ DB Connected");
-
-    mongoose.connection.on("error", (err) => {
-      console.log("❌ DB Error:", err.message);
-    });
-
+    console.log("✅ MongoDB Connected");
   } catch (error) {
     console.log(
       "❌ MongoDB Connection Failed:",
