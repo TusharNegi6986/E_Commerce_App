@@ -17,7 +17,10 @@ connectCloudinary();
 const allowedOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
-  "https://e-commerce-app-frontend-red.vercel.app"
+  "https://e-commerce-app-frontend-red.vercel.app",
+
+  // admin panel
+  "https://e-commerce-app-admin-gamma.vercel.app"
 ];
 
 // CORS
